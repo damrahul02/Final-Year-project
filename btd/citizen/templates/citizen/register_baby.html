@@ -1,0 +1,372 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Font Awosome -->
+
+    <link rel="stylesheet" data-purpose="Layout StyleSheet" title="Web Awesome" href="/css/app-wa-8106c2e05ae3cd7bfbb686f33d73a923.css?vsn=d" />
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css" />
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-thin.css" />
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-solid.css" />
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-regular.css" />
+
+    <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.5.1/css/sharp-light.css" />
+
+    <!-- Font link -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static 'css/citizen__register.css' %}" />
+    
+    <link rel="shortcut icon" href="./images/icons8-good-quality-48.png" type="image/x-icon" />
+
+    <title>Registration - Baby</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg customNav">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <picture>
+                    <img src="./images/2.png" alt="logo" class="navbar__logo" />
+                </picture>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            
+
+            <div class="collapse navbar-collapse text-end" id="navbarSupportedContent">
+                <form class="d-flex ms-auto" role="search">
+                <div class="btn ">
+            <button type="button" class="btn btn-success " aria-expanded="false">
+            
+            </button>
+            </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <section id="login__part">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 move__center">
+                    <div class="main">
+                        <h2>Registration Form</h2>
+                        
+                        <form action="{% url 'citizen:register_baby' %}" method="post">
+                            {% csrf_token %}
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="first_name" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="last_name" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="full_name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="full_name" name="full_name" readonly>
+                                </div>
+                            </div>
+                            <!-- Gender and Religion -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="religion" class="form-label">Religion</label>
+                                    <input type="text" class="form-control" id="religion" name="religion" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="birth_data" class="form-label">Birth Data</label>
+                            </div>
+                            <!-- Birth Place Information -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="country" class="form-label">Country</label>
+                                    <select class="form-select" id="birth_country" name="birth_country" required>
+                                        <option value="">Select Country</option>
+                                        <option value="">Bangladesh</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="birth_division" class="form-label">Division</label>
+                                    <select class="form-select" id="birth_division" name="birth_division" required>
+                                        <option value="">Select Division</option>
+                                        {% for division in divisions %}
+                                            <option value="{{ division.id }}">{{ division.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="birth_district" class="form-label">District</label>
+                                    <select class="form-select" id="birth_district" name="birth_district" required>
+                                        <option value="">Select District</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="birth_subdistrict" class="form-label">Sub District</label>
+                                    <select class="form-select" id="birth_subdistrict" name="birth_subdistrict" required>
+                                        <option value="">Select Sub District</option>
+                                        <!-- Options will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="row mb-3">
+                                <div class="col-lg-12">
+                                    <label for="birthDate" class="form-label">Birth Date</label>
+                                    <div class="input-group">
+                                    <select id="selectMonth" name="selectMonth" class="form-select" required>
+                                            <option>Month</option>
+                                            <option>January</option>
+                                            <option>February</option>
+                                            <option>March</option>
+                                            <option>April</option>
+                                            <option>May</option>
+                                            <option>June</option>
+                                            <option>July</option>
+                                            <option>August</option>
+                                            <option>September</option>
+                                            <option>October</option>
+                                            <option>November</option>
+                                            <option>December</option>
+                                        
+                                        </select>
+
+                                        <select id="selectDay" name="selectDay" class="form-select" required>
+                                            <option>Day</option>
+                                            <option>1</option>
+                                            <option>2</option>
+                                            <option>3</option>
+                                            <option>4</option>
+                                            <option>5</option>
+                                            <option>6</option>
+                                            <option>7</option>
+                                            <option>8</option>
+                                            <option>9</option>
+                                            <option>10</option>
+                                            
+                                        </select>
+
+                                        <select id="selectYear" name="selectYear" class="form-select" required>
+                                            <option>Year</option>
+                                            <option>2020</option>
+                                            <option>2019</option>
+                                            <option>2018</option>
+                                            <option>2017</option>
+                                            <option>2016</option>
+                                            <option>2015</option>
+                                            <option>2014</option>
+                                            <option>2013</option>
+                                            <option>2012</option>
+                                            <option>2011</option>
+                                            <option>2010</option>
+                                            <option>2009</option>
+                                            <option>2008</option>
+                                            <option>2007</option>
+                                            <option>2006</option>
+                                            <option>2005</option>
+                                            <option>2004</option>
+                                            <option>2003</option>
+                                            <option>2002</option>
+                                            <option>2001</option>
+                                            <option>2000</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                            </div>
+
+                            <!-- Address Information -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="present_address" class="form-label">Present Address</label>
+                                    <textarea class="form-control" id="present_address" name="present_address" required></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="permanent_address" class="form-label">Permanent Address</label>
+                                    <textarea class="form-control" id="permanent_address" name="permanent_address" required></textarea>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="same_as_present">
+                                        <label class="form-check-label" for="same_as_present">Same as Present Address</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="parental_info" class="form-label">Parental Info</label>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="fatherName" class="form-label">Father's Name</label>
+                                    <input type="text" class="form-control" id="fatherName" name="fatherName" required />
+                                </div>
+                                <div class="col-lg-6">
+                                    <label for="fatherNid" class="form-label">Father's NID Number</label>
+                                    <input type="number" class="form-control" id="fatherNid" name="fatherNid" required />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label for="motherName" class="form-label">Mother's Name</label>
+                                    <input type="text" class="form-control" id="motherName" name="motherName" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="motherNid" class="form-label">Mother's NID Number</label>
+                                    <input type="number" class="form-control" id="motherNid" name="motherNid" required />
+                                </div>
+                            </div>
+                            
+                            <!-- Emergency Contact -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="contact" class="form-label">Contact Number</label>
+                                    <input type="text" class="form-control" id="contact" name="contact" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="relationship" class="form-label">Relationship</label>
+                                    <select class="form-select" id="relationship" name="relationship" required>
+                                            <option value="mother">Mother</option>
+                                            <option value="father">Father</option>
+                                            <option value="brother">Brother</option>
+                                            <option value="sister">Sister</option>
+                                            
+                                    </select>
+                                </div>
+                            </div>
+                              
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                        <p class="mt-3">
+                            Already registered?
+                            <a href="{% url 'citizen:citizen_panel' %}" style="text-decoration: none;">CLick There</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer id="footerpart">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="footerTopLeft">
+                        <picture>
+                            <img src="./images/2.png" alt class="footer__logo" />
+                        </picture>
+                        <p class="mt-4 text-white footerTopLeft__p">We are always open to discuss and improve your online presence.</p>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="footerRight offset-lg-1">
+                        <h3 class="footerRight__h3 text-white">Lets Digitalize!</h3>
+                        <p class="footerRight__p text-white my-3">“The biggest part of our digital transformation is changing the way we think.” — Simeon Preston.</p>
+                        <div class="icons text-white">
+                            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer><script src="script.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+
+    
+    <script>
+        // Automatically generate the full name when first and last names are filled
+        $('#first_name, #last_name').on('input', function() {
+            var firstName = $('#first_name').val();
+            var lastName = $('#last_name').val();
+            $('#full_name').val(firstName + ' ' + lastName);
+        });
+
+        // Populate the districts and subdistricts dropdowns
+        $(document).ready(function() {
+            // Load districts based on selected division
+            $('#birth_division').change(function() {
+                var division_id = $(this).val();
+                $.ajax({
+                    url: '{% url "citizen:load_districts" %}',  // Django URL for loading districts
+                    method: 'GET',
+                    data: { division_id: division_id },
+                    success: function(data) {
+                        $('#birth_district').html('<option value="">Select District</option>');
+                        $.each(data, function(index, district) {
+                            $('#birth_district').append('<option value="' + district.id + '">' + district.name + '</option>');
+                        });
+                        $('#birth_subdistrict').html('<option value="">Select Subdistrict</option>');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading districts: ", error);
+                    }
+                });
+            });
+
+            // Load subdistricts based on selected district
+            $('#birth_district').change(function() {
+                var district_id = $(this).val();
+                $.ajax({
+                    url: '{% url "citizen:load_subdistricts" %}',  // Django URL for loading subdistricts
+                    method: 'GET',
+                    data: { district_id: district_id },
+                    success: function(data) {
+                        $('#birth_subdistrict').html('<option value="">Select Subdistrict</option>');
+                        $.each(data, function(index, subdistrict) {
+                            $('#birth_subdistrict').append('<option value="' + subdistrict.id + '">' + subdistrict.name + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading subdistricts: ", error);
+                    }
+                });
+            });
+        }); 
+        $('#same_as_present').change(function() {
+            if (this.checked) {
+                $('#permanent_address').val($('#present_address').val());
+            } else {
+                $('#permanent_address').val('');
+            }
+        });
+    </script>
+</body>
+</html>

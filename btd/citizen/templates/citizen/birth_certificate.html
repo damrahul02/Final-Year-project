@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birth Certificate</title>
+    <link rel="stylesheet" href="{% static 'css/birth_certificate.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Birth Certificate</h1>
+        <h2>{{ applicant.full_name }}</h2>
+        <p><strong>Birth Date:</strong> {{ applicant.birth_date }}</p>
+        <p><strong>Father's Name:</strong> {{ applicant.father_name }}</p>
+        <p><strong>Mother's Name:</strong> {{ applicant.mother_name }}</p>
+        <h3>Vaccination Schedule</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Vaccine Name</th>
+                    <th>Scheduled Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for schedule in vaccination_schedules %}
+                    <tr>
+                        <td>{{ schedule.vaccine_id }}</td>
+                        <td>{{ schedule.scheduled_date }}</td>
+                        <td>{{ schedule.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

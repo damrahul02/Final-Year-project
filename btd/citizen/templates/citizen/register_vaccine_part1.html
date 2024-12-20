@@ -1,0 +1,111 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaccination Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Vaccination Registration Form</h2>
+        
+        <form action="{% url 'citizen:register_vaccine_part1' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="division" class="form-label">Select Division</label>
+                <select class="form-select" id="division" name="division" required>
+                    <option value="">Select Division</option>
+                    {% for division in divisions %}
+                        <option value="{{ division.id }}">{{ division.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="district" class="form-label">Select District</label>
+                <select class="form-select" id="district" name="district" required>
+                    <option value="">Select District</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="subdistrict" class="form-label">Select Subdistrict</label>
+                <select class="form-select" id="subdistrict" name="subdistrict" required>
+                    <option value="">Select Subdistrict</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="healthcare" class="form-label">Select Healthcare Center</label>
+                <select class="form-select" id="healthcare" name="healthcare" required>
+                    <option value="">Select Healthcare Center</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Load districts based on selected division
+            $('#division').change(function() {
+                var division_id = $(this).val();
+                $.ajax({
+                    url: '{% url "citizen:load_districts" %}',  // Django URL for loading districts
+                    method: 'GET',
+                    data: { division_id: division_id },
+                    success: function(data) {
+                        $('#district').html('<option value="">Select District</option>');
+                        $.each(data, function(index, district) {
+                            $('#district').append('<option value="' + district.id + '">' + district.name + '</option>');
+                        });
+                        $('#subdistrict').html('<option value="">Select Subdistrict</option>');
+                        $('#healthcare').html('<option value="">Select Healthcare Center</option>');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading districts: ", error);
+                    }
+                });
+            });
+
+            // Load subdistricts based on selected district
+            $('#district').change(function() {
+                var district_id = $(this).val();
+                $.ajax({
+                    url: '{% url "citizen:load_subdistricts" %}',  // Django URL for loading subdistricts
+                    method: 'GET',
+                    data: { district_id: district_id },
+                    success: function(data) {
+                        $('#subdistrict').html('<option value="">Select Subdistrict</option>');
+                        $.each(data, function(index, subdistrict) {
+                            $('#subdistrict').append('<option value="' + subdistrict.id + '">' + subdistrict.name + '</option>');
+                        });
+                        $('#healthcare').html('<option value="">Select Healthcare Center</option>');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading subdistricts: ", error);
+                    }
+                });
+            });
+
+            // Load healthcare centers based on selected subdistrict
+            $('#subdistrict').change(function() {
+                var subdistrict_id = $(this).val();
+                $.ajax({
+                    url: '{% url "citizen:load_healthcare_centers" %}',  // Django URL for loading healthcare centers
+                    method: 'GET',
+                    data: { subdistrict_id: subdistrict_id },
+                    success: function(data) {
+                        $('#healthcare').html('<option value="">Select Healthcare Center</option>');
+                        $.each(data, function(index, healthcare) {
+                            $('#healthcare').append('<option value="' + healthcare.id + '">' + healthcare.name + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error loading healthcare centers: ", error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
