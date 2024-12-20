@@ -4,7 +4,9 @@ from .views import (
     citizen_profile, citizen_pass, citizen_update, logout,
     register_vaccine_part1, register_baby,
     load_districts, load_subdistricts, load_healthcare_centers,
-    notification, generate_birth_certificate,volunteer_login,volunteer_panel
+    notification, generate_birth_certificate,volunteer_login,volunteer_panel,admin_login,
+    district_dashboard
+
 )
 
 app_name = 'citizen'
@@ -27,4 +29,6 @@ urlpatterns = [
     path('generate_birth_certificate/', generate_birth_certificate, name='generate_birth_certificate'),
     path('volunteer/', volunteer_login, name='volunteer_login'),
     path('volunteer/panel/', volunteer_panel, name='volunteer_panel'),
+    path('admins/login/', admin_login, name='admin_login'),
+    path('admins/district/', district_dashboard, name='district_dashboard'),
 ]

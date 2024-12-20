@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Citizen, Applicant, Division, District, Subdistrict, Healthcare,Vaccine,VaccinationSchedule,Volunteer
+from .models import Citizen, Applicant, Division, District, Subdistrict, Healthcare,Vaccine,VaccinationSchedule,Volunteer,Admin
 from django.contrib.auth.hashers import make_password, check_password
 import random
 import datetime
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, 'citizen/index.html')
@@ -367,12 +368,81 @@ def volunteer_login(request):
 
 
 def volunteer_panel(request):
-    # Check if the user is logged in
+
     if 'volunteer_id' not in request.session:
-        return redirect('citizen:volunteer_login')  # Redirect to login if not logged in
+        return redirect('citizen:volunteer_login')  
 
     citizen_id = request.session['volunteer_id']
     
-    citizen = Volunteer.objects.get(id=citizen_id)  # Get the logged-in citizen's details
+    citizen = Volunteer.objects.get(id=citizen_id) 
 
     return render(request, 'citizen/volenteer_panel.html', {'citizen': citizen})
+
+def admin_login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        role = request.POST['role']
+
+        try:
+            # Check if an admin with this email and role exists
+            admin = Admin.objects.get(email=email, role=role)
+            
+            # Verify the password
+            # if check_password(password, admin.password):
+            if (password==admin.password):
+                # Store admin session details
+                request.session['admin_id'] = admin.id
+                request.session['admin_name'] = admin.name
+                request.session['admin_role'] = admin.role
+                
+                # Redirect based on role
+                if role == 'Division':
+                    return redirect('/dashboard/divisional')
+                elif role == 'District':
+                  return redirect('citizen:district_dashboard') 
+                elif role == 'Sub district':
+                    return redirect('/dashboard/subdistrict')
+            else:
+                messages.error(request, 'Invalid password. Please try again.')
+        except Admin.DoesNotExist:
+            messages.error(request, 'Invalid credentials or role. Please try again.')
+
+    return render(request, 'citizen/admin_login.html')
+@login_required
+def district_dashboard(request):
+    if request.user.is_authenticated and request.session.get('admin_role') == 'District':
+        district_id = request.user.district_id  # Ensure this attribute exists
+
+        # Fetch sub-district admins for this district
+        subdistrict_admins = Admin.objects.filter(role="Sub district", district_id=district_id)
+
+        if request.method == "POST":
+            # Handle form submission to add a new sub-district admin
+            name = request.POST['name']
+            email = request.POST['email']
+            password = request.POST['password']
+            subdistrict_id = request.POST['subdistrict_id']
+
+            try:
+                new_admin = Admin.objects.create(
+                    name=name,
+                    email=email,
+                    password=make_password(password),  # Hash the password
+                    role="Sub district",
+                    district_id=district_id,
+                    subdistrict_id=subdistrict_id
+                )
+                messages.success(request, "Sub-district admin added successfully.")
+                return redirect('district_dashboard')
+            except Exception as e:
+                messages.error(request, f"Error adding sub-district admin: {e}")
+
+        subdistricts = Subdistrict.objects.filter(district_id=district_id)
+
+        return render(request, 'district-admin.html', {
+            'subdistrict_admins': subdistrict_admins,
+            'subdistricts': subdistricts
+        })
+    else:
+        return redirect('citizen:admin_login')  # Redirect to the correct login URL

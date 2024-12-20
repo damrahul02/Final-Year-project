@@ -119,6 +119,7 @@ class Healthcare(models.Model):
 class Subdistrict(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
+    email = models.EmailField(null=True)
     district_id = models.ForeignKey('District', on_delete=models.CASCADE,null=True)
 
     class Meta:
